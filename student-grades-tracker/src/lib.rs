@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 
 pub struct Student {
-    // 1. Define the fields
+    pub name: String,
+    pub grades: Vec<u8>,
 }
 
 pub struct StudentGrades {
-    // 2. Define the fields
+    pub students: HashMap<String, Student>,
 }
 
 impl StudentGrades {
@@ -15,17 +16,30 @@ impl StudentGrades {
         }
     }
 
-    // 3. Implement the methods
     pub fn add_student(&mut self, name: &str) {
-        // Implement here
+        if !self.students.contains_key(name) {
+            self.students.insert(
+                String::from(name),
+                Student {
+                    name: String::from(name),
+                    grades: vec![],
+                },
+            );
+        }
     }
 
     pub fn add_grade(&mut self, name: &str, grade: u8) {
-        // Implement here
+        self.students
+            .entry(String::from(name))
+            .and_modify(|student| student.grades.push(grade));
     }
 
     pub fn get_grades(&self, name: &str) -> &[u8] {
-        // Implement here
+        if let Some(student) = self.students.get(name) {
+            &student.grades.as_slice()
+        } else {
+            &[]
+        }
     }
 }
 
